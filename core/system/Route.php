@@ -6,6 +6,8 @@
  * Time: 19:45
  */
 
+namespace core\system;
+
 class Route
 {
     private $rule;
@@ -20,17 +22,15 @@ class Route
     }
 
 
-    private function getPath(){
-        $url = $_SERVER['REQUEST_URI'];
-        $url = explode("?",$url)[0];
-        return trim($url,"/");
+    private function getClearPath(){
+        return trim(Url::getPath(),"/");
     }
     private function getClearRule(){
         return trim($this->rule,"/");
     }
 
     public function compareRoute(){
-        return $this->getClearRule() === $this->getPath();
+        return $this->getClearRule() === $this->getClearPath();
     }
 
 

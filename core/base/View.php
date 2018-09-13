@@ -5,11 +5,17 @@
  * Date: 30.08.2018
  * Time: 19:41
  */
+namespace core\base;
+use app\configuration\MainConfigurator;
 
 class View
 {
+
+
+//echo $twig->render('index.html', array('name' => 'Fabien'));
     private $path;
     private $template_path=null;
+    private $loader,$twig;
 
     private $params =[];
 
@@ -18,21 +24,19 @@ class View
     }
 
     public function __construct(string $name){
-        $this->path = VIEW_PATH.$name.".php";
+        $this->path = "views/".$name.".twig";
+        $this->loader = new \Twig_Loader_Filesystem(APP_PATH);
+        $opt = MainConfigurator::TEMPLATE_CACHE ? ['cache'=>DOCROOT."cache/views"]:[];
+        $this->twig = new \Twig_Environment($this->loader,$opt);
+
     }
 
     private function _render(){
-        ob_start();
-        extract($this->params);
-        include $this->path;
-        return ob_get_clean();
+        return $this->twig->render($this->path,$this->params);
     }
     private function _renderTemplate(){
-        ob_start();
-        extract($this->params);
-        $content = $this->_render();
-        include $this->template_path;
-        return ob_get_clean();
+        $this->params["content"] = $this->_render();
+        return $this->twig->render($this->template_path,$this->params);
     }
 
 
@@ -43,7 +47,7 @@ class View
     }
 
     public function setTemplate($name = "default"){
-        $this->template_path = TEMPLATES_PATH.$name.".php";
+        $this->template_path = "templates/".$name.".twig";
     }
 
 

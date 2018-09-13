@@ -1,24 +1,32 @@
 <?php
 
+use app\configuration\RouteConfigurator;
+use core\system\exceptions\RouterException;
+use core\system\Router;
+
 define("DOCROOT",__DIR__."/../");
 define("VIEW_PATH",DOCROOT."app/views/");
 define("TEMPLATES_PATH",DOCROOT."app/templates/");
+define("APP_PATH",DOCROOT."app/");
 
-require_once __DIR__."/base/Controller.php";
-require_once __DIR__."/base/Model.php";
-require_once __DIR__."/base/View.php";
 
-require_once __DIR__."/system/exceptions/RouterException.php";
-require_once __DIR__."/system/Route.php";
-require_once __DIR__."/system/Router.php";
+require_once DOCROOT."vendor/autoload.php";
 
-Router::instance()->addRoute(new Route("","main","index"));
-Router::instance()->addRoute(new Route("test","main","test"));
+
+
+spl_autoload_register(function ($name){
+    $path = DOCROOT.str_replace("\\","/",$name).".php";
+    if(file_exists($path)) require_once $path;
+});
+
+
+RouteConfigurator::routerConfigure();
+
 
 try{
     Router::instance()->navigate();
 }catch (RouterException $e){
-    echo "404 NOT FOUND: ".$e->getMessage();
+    RouteConfigurator::onRouterError($e);
 }
 
 

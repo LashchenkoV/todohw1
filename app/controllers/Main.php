@@ -1,16 +1,15 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: mamedov
- * Date: 30.08.2018
- * Time: 20:18
- */
+
+namespace app\controllers;
+use core\base\Controller;
+use core\base\View;
 
 class Main extends Controller{
     public function action_index(){
         $v = new View("main");
         $v->text="hello main page";
         $v->header="HELLO";
+        $v->x=[1,2,3,4,5,6];
         $v->setTemplate();
         echo $v->render();
     }

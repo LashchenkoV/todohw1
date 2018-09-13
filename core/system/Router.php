@@ -1,5 +1,9 @@
 <?php
 
+namespace core\system;
+
+use core\system\exceptions\RouterException;
+
 class Router
 {
     private static $inst=null;
@@ -19,21 +23,19 @@ class Router
     public function navigate(){
         foreach ($this->routes as $route){
             if($route->compareRoute()){
-                $this->_navigate($route->getController(),$route->getAction());
+                $this->navigateTo($route->getController(),$route->getAction());
                 return;
             }
         }
         throw new RouterException("route not found");
     }
 
-    private function _navigate($controller,$action){
-        $ctrl_class_name = ucfirst(strtolower($controller));
+    public function navigateTo($controller,$action){
+        $ctrl_class_name = "\\app\\controllers\\".ucfirst(strtolower($controller));
         $action_name = "action_".strtolower($action);
 
-        $ctrl_path = DOCROOT."app/controllers/".$ctrl_class_name.".php";
-
-        if(!file_exists($ctrl_path)) throw new RouterException("controller not found");
-        include_once $ctrl_path;
+        if(!file_exists(rtrim(DOCROOT,"/").str_replace("\\","/",$ctrl_class_name).".php"))
+            throw new RouterException("controller not found");
 
         $ctrl = new $ctrl_class_name();
         if(!method_exists($ctrl,$action_name)) throw new RouterException("action not found");
