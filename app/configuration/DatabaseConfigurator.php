@@ -15,7 +15,7 @@ class DatabaseConfigurator
         'default'=>[
             'host'=>'127.0.0.1',
             'port'=>3306,
-            'dbname'=>'mysql',
+            'dbname'=>'demo',
             'user'=>'root',
             'pass'=>'0000',
             'charset'=>'utf8'

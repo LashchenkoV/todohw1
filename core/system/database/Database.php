@@ -70,6 +70,7 @@ class Database
 
         $q = "UPDATE `{$table}` SET ".implode(", ",$subarr);
         if(!empty($where)) $q.=" WHERE ".$where;
+        echo $q;
 
         $stmt = $this->dbh->prepare($q);
         $stmt->execute(array_merge($_values,$params));

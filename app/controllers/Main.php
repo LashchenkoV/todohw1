@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\models\User;
 use core\base\Controller;
 use core\base\View;
 use core\system\database\Database;
@@ -17,17 +18,14 @@ class Main extends Controller
 //        $v->x=[1,2,3,4,5,6];
 //        $v->setTemplate();
 //        echo $v->render();
-        $db = Database::instance();
-        echo $db->users
-            ->where("age", ">", ":minAge")
-            ->andWhere("age", "<", ":maxAge")
-            ->andWhereGroup(function (DatabaseQuery $t) {
-                $t->where("a", ">", ":a");
-                $t->orWhere("b", "<", ":b");
-            })
-            ->asc('name')
-            ->limit(20)
-            ->getResult();
+       // User::insert(["name"=>"oleg","pass"=>"233"]);
+        User::where("pass","?")->delete(["0000"]);
+        //$users = User::where("id",">",":minid")->all(["minid"=>4]);
+        User::where("name","'oleg'")->update(["pass"=>"olegoleg5"]);
+        $users = User::all();
+        echo "<pre>";
+        print_r($users);
+
     }
 
     public function action_test()
