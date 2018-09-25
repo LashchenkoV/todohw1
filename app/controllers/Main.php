@@ -2,7 +2,7 @@
 
 namespace app\controllers;
 
-use app\models\User;
+use app\models\Note;
 use core\base\Controller;
 use core\base\View;
 use core\system\database\Database;
@@ -12,24 +12,65 @@ class Main extends Controller
 {
     public function action_index()
     {
-//        $v = new View("main");
-//        $v->text="hello main page";
-//        $v->header="HELLO";
-//        $v->x=[1,2,3,4,5,6];
-//        $v->setTemplate();
-//        echo $v->render();
-       // User::insert(["name"=>"oleg","pass"=>"233"]);
-        User::where("pass","?")->delete(["0000"]);
-        //$users = User::where("id",">",":minid")->all(["minid"=>4]);
-        User::where("name","'oleg'")->update(["pass"=>"olegoleg5"]);
-        $users = User::all();
-        echo "<pre>";
-        print_r($users);
-
+        $tableNotes = new View("tableNotes");
+        $tableNotes->notes = Note::all();
+        $tableNotes->setTemplate();
+        echo $tableNotes->render();
     }
 
-    public function action_test()
+    public function action_getEditForm(){
+        if(empty(@$_POST['id'])){
+            echo json_encode(["status"=>0]);
+            return;
+        }
+        $editForm = new View("editForm");
+        $editForm->note = Note::where("id",$_POST['id'])->all();
+        echo $editForm->render();
+    }
+    public function action_getTableNotes()
     {
-        echo "test";
+        $tableNotes = new View("tableNotes");
+        $tableNotes->notes = Note::all();
+        echo $tableNotes->render();
+    }
+    public function action_delNote(){
+        if(!empty(@$_POST['id'])){
+            Note::where("id",$_POST['id'])->delete();
+            echo json_encode(["status"=>1]);
+        }
+        else echo json_encode(["status"=>0]);
+    }
+    public function action_editNote(){
+        if(!empty(@$_POST['title']) && !empty(@$_POST['message']) && !empty(@$_POST['id'])){
+            Note::where("id",$_POST['id'])->update([
+                "title"=>$_POST['title'],
+                "text"=>$_POST['message'],
+                "date"=>time()
+            ]);
+        }else{
+            $err = new View("errorForm");
+            $err->text = "Ошибка редактирования";
+            $err->errors= [];
+            if(empty(@$_POST['title']))
+                $err->errors[] = "Неверный заголовок";
+            if(empty(@$_POST['message']))
+                $err->errors[] = "Неверноый текст";
+
+            echo $err->render();
+        }
+    }
+    public function action_addTodo()
+    {
+        if(!empty(@$_POST['title']) && !empty(@$_POST['message'])){
+            $model = new Note();
+            $id = $model->addNote([
+                "title"=>$_POST['title'],
+                "text"=>$_POST['message'],
+                "date"=>time()
+            ]);
+            echo $id>0?json_encode(["status"=>1,"id"=>$id]):json_encode(["status"=>0]);
+        }else{
+            echo json_encode(["status"=>0]);
+        }
     }
 }

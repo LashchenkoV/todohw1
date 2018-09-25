@@ -1,7 +1,7 @@
 <?php
 /**
  * Created by PhpStorm.
- * User: mamedov
+ * Note: mamedov
  * Date: 18.09.2018
  * Time: 18:43
  */
@@ -15,9 +15,9 @@ class DatabaseConfigurator
         'default'=>[
             'host'=>'127.0.0.1',
             'port'=>3306,
-            'dbname'=>'demo',
+            'dbname'=>'todo',
             'user'=>'root',
-            'pass'=>'0000',
+            'pass'=>'root',
             'charset'=>'utf8'
         ],
         'custom1'=>[

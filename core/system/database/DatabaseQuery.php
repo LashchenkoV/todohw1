@@ -1,7 +1,7 @@
 <?php
 /**
  * Created by PhpStorm.
- * User: mamedov
+ * Note: mamedov
  * Date: 18.09.2018
  * Time: 19:38
  */
@@ -253,10 +253,6 @@ class DatabaseQuery
 
     }
 
-
-
-
-
     private function buildSelect()
     {
         return "SELECT "
@@ -299,7 +295,7 @@ class DatabaseQuery
     }
 
     public function insert(array $data){
-        $this->db->insert($this->table,$data);
+        return $this->db->insert($this->table,$data);
     }
 
     public function all(array $params=[]){

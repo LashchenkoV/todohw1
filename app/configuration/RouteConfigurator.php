@@ -1,7 +1,7 @@
 <?php
 /**
  * Created by PhpStorm.
- * User: mamedov
+ * Note: mamedov
  * Date: 13.09.2018
  * Time: 19:09
  */
@@ -19,6 +19,11 @@ class RouteConfigurator
     public static function routerConfigure(){
         Router::instance()->addRoute(new Route("","main","index"));
         Router::instance()->addRoute(new Route("test","main","test"));
+        Router::instance()->addRoute(new Route("addTodo","main","addTodo"));
+        Router::instance()->addRoute(new Route("getTableNotes","main","getTableNotes"));
+        Router::instance()->addRoute(new Route("delNote","main","delNote"));
+        Router::instance()->addRoute(new Route("editNote","main","editNote"));
+        Router::instance()->addRoute(new Route("getEditForm","main","getEditForm"));
         Router::instance()->addRoute(new Route("404","c404","index"));
     }
 
