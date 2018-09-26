@@ -37,14 +37,14 @@ let admin = {
                 $.ajax({
                     method: "POST",
                     url:"/editNote",
-                    data:{id:id,title:title,message:message}
+                    data:{id:id,title:title,message:message},
+                    dataType: "JSON"
                 }).done(function (html) {
-                    $("#editModal").modal("hide");
-                    if(html!=undefined){
-                        $("#err").html(html);
-                        //$("#err div").css("z-index","100").modal("show");
+                    if(html.status == 0){
+                        alert(html.err);
                         return;
                     }
+                    $("#editModal").modal("hide");
                     this.getTableNote();
                 }.bind(this));
             }.bind(this))

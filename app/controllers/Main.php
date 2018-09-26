@@ -47,16 +47,15 @@ class Main extends Controller
                 "text"=>$_POST['message'],
                 "date"=>time()
             ]);
+            echo json_encode(["status"=>1]);
         }else{
-            $err = new View("errorForm");
-            $err->text = "Ошибка редактирования";
-            $err->errors= [];
+            $err = '';
             if(empty(@$_POST['title']))
-                $err->errors[] = "Неверный заголовок";
+                $err .= "Неверный заголовок";
             if(empty(@$_POST['message']))
-                $err->errors[] = "Неверноый текст";
+                $err .= " Неверноый текст";
 
-            echo $err->render();
+            echo json_encode(["status"=>0,"err"=>$err]);
         }
     }
     public function action_addTodo()
